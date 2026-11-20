@@ -474,8 +474,10 @@ def activate(request, uidb64, token):
     return redirect('login')
 
 
+
 def login_view(request):
     next_url = request.POST.get('next') or request.GET.get('next', '')
+    errors = []
 
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
@@ -487,7 +489,7 @@ def login_view(request):
             password=password
         )
 
-        if user:
+        if user is not None:
             login(request, user)
 
             if url_has_allowed_host_and_scheme(
@@ -498,8 +500,13 @@ def login_view(request):
 
             return redirect('home')
 
+        errors.append(
+            'Invalid username or password, or your account is not activated.'
+        )
+
     return render(request, 'login.html', {
-        'next': next_url
+        'next': next_url,
+        'errors': errors
     })
 
 

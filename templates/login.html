@@ -5,6 +5,13 @@
 {% block content %}
 <div class="card form-card">
     <h1>Вход</h1>
+    {% if errors %}
+    <div class="error-box">
+        {% for error in errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
 
     <form method="post">
         {% csrf_token %}
