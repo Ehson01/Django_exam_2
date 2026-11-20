@@ -5,6 +5,14 @@
 {% block content %}
 <div class="card form-card">
     <h1>Регистрация</h1>
+
+    {% if errors %}
+        <div class="form-errors">
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
     <p class="subtitle">После регистрации нужно подтвердить email по ссылке из письма.</p>
 
     <form method="post">
