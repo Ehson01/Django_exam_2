@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Новая компания{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+    <h1>Новая компания</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% include 'company_fields.html' %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Добавить</button>
+            <a class="btn btn-outline" href="{% url 'company_list' %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

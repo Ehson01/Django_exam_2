@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ company.name }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div>
+        <h1>{{ company.name }}</h1>
+        <p class="subtitle"><a href="{{ company.website }}" target="_blank" rel="noopener">{{ company.website }}</a></p>
+    </div>
+    {% if user.is_staff or user.is_superuser %}
+        <div class="btn-group">
+            <a class="btn btn-outline" href="{% url 'company_update' company.pk %}">Редактировать</a>
+            <a class="btn btn-danger" href="{% url 'company_delete' company.pk %}">Удалить</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>О компании</h2>
+    {{ company.description|default:"Описание не указано."|linebreaks }}
+</div>
+
+<h2>Вакансии компании ({{ jobs|length }})</h2>
+{% for job in jobs %}
+    {% include 'job_card.html' %}
+{% empty %}
+    <div class="card empty">У компании пока нет вакансий.</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Изменение отклика{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+    <h1>Изменение отклика</h1>
+    <p class="subtitle">{{ application.job.title }} · {{ application.user.username }}</p>
+    <form method="post">
+        {% csrf_token %}
+        {% if is_author_of_application %}
+            <label for="cover_letter">Сопроводительное письмо</label>
+            <textarea id="cover_letter" name="cover_letter">{{ application.cover_letter|default:"" }}</textarea>
+        {% endif %}
+        {% if is_manager %}
+            <label for="status">Статус</label>
+            <select id="status" name="status">
+                {% for code, label in status_choices %}
+                    <option value="{{ code }}" {% if application.status == code %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Сохранить</button>
+            <a class="btn btn-outline" href="{% url 'job_detail' application.job_id %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

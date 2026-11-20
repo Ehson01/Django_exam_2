@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Новая вакансия{% endblock %}
+
+{% block content %}
+<div class="card form-card form-wide">
+    <h1>Новая вакансия</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% include 'job_fields.html' %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Опубликовать</button>
+            <a class="btn btn-outline" href="{% url 'job_list' %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

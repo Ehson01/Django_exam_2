@@ -1,0 +1,37 @@
+<label for="title">Название *</label>
+<input type="text" id="title" name="title" maxlength="100" value="{{ job.title }}" required>
+
+<label for="company">Компания *</label>
+<select id="company" name="company" required>
+    <option value="">— выберите —</option>
+    {% for company in companies %}
+        <option value="{{ company.id }}" {% if job.company_id == company.id %}selected{% endif %}>{{ company.name }}</option>
+    {% endfor %}
+</select>
+<div class="hint">Нет нужной компании? <a href="{% url 'company_create' %}">Добавить компанию</a></div>
+
+<label for="category">Категория *</label>
+<select id="category" name="category" required>
+    <option value="">— выберите —</option>
+    {% for category in categories %}
+        <option value="{{ category.id }}" {% if job.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>
+    {% endfor %}
+</select>
+<div class="hint">Нет нужной категории? <a href="{% url 'category_create' %}">Добавить категорию</a></div>
+
+<label for="employment_type">Тип занятости *</label>
+<select id="employment_type" name="employment_type" required>
+    <option value="">— выберите —</option>
+    {% for code, label in employment_choices %}
+        <option value="{{ code }}" {% if job.employment_type == code %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+</select>
+
+<label for="salary">Зарплата (TJS) *</label>
+<input type="number" id="salary" name="salary" min="0" max="999999" step="0.01" value="{{ job.salary|stringformat:'s' }}" required>
+
+<label for="location">Город *</label>
+<input type="text" id="location" name="location" maxlength="100" value="{{ job.location }}" required>
+
+<label for="description">Описание</label>
+<textarea id="description" name="description">{{ job.description|default:"" }}</textarea>

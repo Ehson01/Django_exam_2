@@ -1,0 +1,8 @@
+<label for="name">Название *</label>
+<input type="text" id="name" name="name" maxlength="100" value="{{ company.name }}" required autofocus>
+
+<label for="website">Сайт</label>
+<input type="text" id="website" name="website" maxlength="100" value="{{ company.website }}" placeholder="https://example.com">
+
+<label for="description">Описание</label>
+<textarea id="description" name="description">{{ company.description|default:"" }}</textarea>

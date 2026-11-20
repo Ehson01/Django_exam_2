@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование компании{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+    <h1>Редактирование компании</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% include 'company_fields.html' %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Сохранить</button>
+            <a class="btn btn-outline" href="{% url 'company_detail' company.pk %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

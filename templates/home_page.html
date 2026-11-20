@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Найдите работу своей мечты</h1>
+    <p>Сейчас на платформе {{ jobs_total }} вакансий от {{ companies_total }} компаний.</p>
+    <form method="get" action="{% url 'job_list' %}">
+        <input type="text" name="q" placeholder="Название вакансии, например: Python">
+        <button type="submit" class="btn" style="background:#fff;color:#2563eb;border-color:#fff">Найти</button>
+    </form>
+</section>
+
+<div class="stats-grid">
+    <div class="stat"><div class="value">{{ jobs_total }}</div><div class="label">вакансий</div></div>
+    <div class="stat"><div class="value">{{ companies_total }}</div><div class="label">компаний</div></div>
+    <div class="stat"><div class="value">{{ applications_total }}</div><div class="label">откликов</div></div>
+</div>
+
+<div class="page-head">
+    <h2>Свежие вакансии</h2>
+    <a class="btn btn-outline btn-sm" href="{% url 'job_list' %}">Все вакансии →</a>
+</div>
+
+{% for job in latest_jobs %}
+    {% include 'job_card.html' %}
+{% empty %}
+    <div class="card empty">Вакансий пока нет. <a href="{% url 'job_create' %}">Добавьте первую!</a></div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Отклик на вакансию{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+    <h1>Отклик на вакансию</h1>
+    <p class="subtitle">{{ job.title }} · {{ job.company.name }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <label for="cover_letter">Сопроводительное письмо</label>
+        <textarea id="cover_letter" name="cover_letter" placeholder="Расскажите, почему вы подходите на эту должность"></textarea>
+        <div class="form-actions">
+            <button type="submit" class="btn">Отправить отклик</button>
+            <a class="btn btn-outline" href="{% url 'job_detail' job.pk %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

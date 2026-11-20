@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div>
+        <h1>{{ job.title }}</h1>
+        <p class="subtitle">
+            <a href="{% url 'company_detail' job.company.pk %}">{{ job.company.name }}</a> · {{ job.location }}
+        </p>
+    </div>
+    {% if can_manage %}
+        <div class="btn-group">
+            <a class="btn btn-outline" href="{% url 'job_update' job.pk %}">Редактировать</a>
+            <a class="btn btn-danger" href="{% url 'job_delete' job.pk %}">Удалить</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="detail-grid">
+    <div>
+        <div class="card">
+            <h2>Описание</h2>
+            {{ job.description|default:"Описание не указано."|linebreaks }}
+        </div>
+
+        <div class="card">
+            <div class="page-head" style="margin-bottom:8px">
+                <h2>Отклики ({{ applications|length }})</h2>
+                {% if job.created_by != user %}
+                    <a class="btn btn-sm" href="{% url 'application_create' job.pk %}">Откликнуться</a>
+                {% endif %}
+            </div>
+
+            {% for application in applications %}
+                <div class="application">
+                    <strong>{{ application.user.username }}</strong>
+                    <span class="badge {{ application.status }}">{{ application.get_status_display }}</span>
+                    <span class="meta">{{ application.created_at|date:"d.m.Y H:i" }}</span>
+                    {% if application.cover_letter %}
+                        <div class="meta">{{ application.cover_letter|truncatewords:30 }}</div>
+                    {% endif %}
+                    {% if application.user == user or can_manage %}
+                        <div style="margin-top:6px">
+                            <a href="{% url 'application_update' application.pk %}">Изменить</a> ·
+                            <a href="{% url 'application_delete' application.pk %}">Удалить</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="empty">Пока никто не откликнулся.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <div class="card">
+            <h2>Информация</h2>
+            <div class="info-row"><span>Компания</span><strong>{{ job.company.name }}</strong></div>
+            <div class="info-row"><span>Категория</span><strong>{{ job.category.name }}</strong></div>
+            <div class="info-row"><span>Зарплата</span><strong>{{ job.salary|floatformat:"0" }} TJS</strong></div>
+            <div class="info-row"><span>Занятость</span><strong>{{ job.get_employment_type_display }}</strong></div>
+            <div class="info-row"><span>Город</span><strong>{{ job.location }}</strong></div>
+            <div class="info-row"><span>Автор</span><strong>{{ job.created_by.username }}</strong></div>
+            <div class="info-row"><span>Опубликовано</span><strong>{{ job.created_at|date:"d.m.Y" }}</strong></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

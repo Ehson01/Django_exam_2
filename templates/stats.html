@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Статистика{% endblock %}
+
+{% block content %}
+<h1>Статистика</h1>
+<p class="subtitle">Считается в базе данных через aggregate() и annotate().</p>
+
+{# aggregate(): одно число на всю таблицу #}
+<div class="stats-grid">
+    <div class="stat"><div class="value">{{ jobs_total }}</div><div class="label">всего вакансий</div></div>
+    <div class="stat"><div class="value">{{ average_salary|default:0|floatformat:"0" }}</div><div class="label">средняя зарплата, TJS</div></div>
+    <div class="stat"><div class="value">{{ applications_total }}</div><div class="label">всего откликов</div></div>
+</div>
+
+{# annotate(): вычисляемое поле jobs_count у каждой компании #}
+<div class="card">
+    <h2>Вакансии по компаниям</h2>
+    <table>
+        <thead><tr><th>Компания</th><th>Вакансий</th></tr></thead>
+        <tbody>
+            {% for company in companies %}
+                <tr>
+                    <td><a href="{% url 'company_detail' company.pk %}">{{ company.name }}</a></td>
+                    <td>{{ company.jobs_count }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2" class="empty">Нет данных</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

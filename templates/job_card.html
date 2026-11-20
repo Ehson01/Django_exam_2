@@ -1,0 +1,13 @@
+{# Карточка вакансии — подключается в списках через include #}
+<div class="job-card">
+    <div>
+        <h3><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
+        <div class="meta">{{ job.company.name }} · {{ job.location }}</div>
+        <div style="margin-top:8px">
+            <span class="badge">{{ job.category.name }}</span>
+            <span class="badge">{{ job.get_employment_type_display }}</span>
+            <span class="meta">{{ job.created_at|date:"d.m.Y" }}</span>
+        </div>
+    </div>
+    <div class="salary">{{ job.salary|floatformat:"0" }} TJS</div>
+</div>

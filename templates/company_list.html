@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Компании{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div>
+        <h1>Компании</h1>
+        <p class="subtitle">Всего: {{ companies|length }}</p>
+    </div>
+    <a class="btn" href="{% url 'company_create' %}">+ Добавить компанию</a>
+</div>
+
+<div class="card">
+    <table>
+        <thead><tr><th>Название</th><th>Сайт</th><th>Вакансий</th><th></th></tr></thead>
+        <tbody>
+            {% for company in companies %}
+                <tr>
+                    <td><a href="{% url 'company_detail' company.pk %}">{{ company.name }}</a></td>
+                    <td>{{ company.website }}</td>
+                    <td>{{ company.jobs_count }}</td>
+                    <td style="text-align:right">
+                        {% if user.is_staff or user.is_superuser %}
+                            <a class="btn btn-outline btn-sm" href="{% url 'company_update' company.pk %}">Изменить</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'company_delete' company.pk %}">Удалить</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4" class="empty">Компаний пока нет.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

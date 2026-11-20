@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление вакансии{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+    <h1>Удалить вакансию?</h1>
+    <p>Вы собираетесь удалить вакансию <strong>«{{ job.title }}»</strong> ({{ job.company.name }}).
+       Вместе с ней будут удалены все отклики ({{ job.applications.count }}). Это действие нельзя отменить.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Да, удалить</button>
+            <a class="btn btn-outline" href="{% url 'job_detail' job.pk %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

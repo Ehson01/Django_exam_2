@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div>
+        <h1>{{ user.username }}</h1>
+        <p class="subtitle">{{ user.email|default:"email не указан" }} · на сайте с {{ user.date_joined|date:"d.m.Y" }}</p>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-outline" href="{% url 'password_change' %}">Сменить пароль</a>
+        <a class="btn" href="{% url 'job_create' %}">+ Добавить вакансию</a>
+    </div>
+</div>
+
+<div class="card">
+    {# user.jobs — reverse relation: вакансии, созданные пользователем #}
+    <h2>Мои вакансии ({{ my_jobs|length }})</h2>
+    {% for job in my_jobs %}
+        <div class="application" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+                <a href="{% url 'job_detail' job.pk %}"><strong>{{ job.title }}</strong></a>
+                <div class="meta">{{ job.company.name }} · откликов: {{ job.applications.count }}</div>
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-outline btn-sm" href="{% url 'job_update' job.pk %}">Изменить</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'job_delete' job.pk %}">Удалить</a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty">Вы ещё не добавляли вакансий.</div>
+    {% endfor %}
+</div>
+
+<div class="card">
+    {# user.applications — reverse relation: отклики пользователя #}
+    <h2>Мои отклики ({{ my_applications|length }})</h2>
+    {% for application in my_applications %}
+        <div class="application" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+                <a href="{% url 'job_detail' application.job.pk %}"><strong>{{ application.job.title }}</strong></a>
+                <span class="badge {{ application.status }}">{{ application.get_status_display }}</span>
+                <div class="meta">{{ application.job.company.name }} · {{ application.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-outline btn-sm" href="{% url 'application_update' application.pk %}">Изменить</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'application_delete' application.pk %}">Удалить</a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty">Вы ещё не откликались на вакансии.</div>
+    {% endfor %}
+</div>
+{% endblock %}
